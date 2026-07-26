@@ -1,66 +1,728 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Redes - Lucho RK</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A0A0B">
+
+<title>Lucho RK — Música, vídeos y conciertos | Web oficial</title>
+<meta name="description" content="Web oficial de Lucho RK, artista urbano de Gran Canaria. Escucha su última música en Spotify, mira los vídeos, consulta las fechas de conciertos y apúntate a la lista para enterarte antes que nadie.">
+<link rel="canonical" href="https://luchork.pages.dev/">
+
+<!-- Open Graph / redes: og:image DEBE ser una URL absoluta para que WhatsApp la muestre -->
+<meta property="og:type" content="music.musician">
+<meta property="og:site_name" content="Lucho RK">
+<meta property="og:locale" content="es_ES">
+<meta property="og:url" content="https://luchork.pages.dev/">
+<meta property="og:title" content="Lucho RK — Web oficial">
+<meta property="og:description" content="Sol y luna desde Gran Canaria. Escucha la última música de Lucho RK, mira los vídeos y no te pierdas ninguna fecha.">
+<meta property="og:image" content="https://luchork.pages.dev/assets/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Lucho RK — sol y luna desde Gran Canaria">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Lucho RK — Web oficial">
+<meta name="twitter:description" content="Sol y luna desde Gran Canaria. Escucha la última música de Lucho RK.">
+<meta name="twitter:image" content="https://luchork.pages.dev/assets/img/og.jpg">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+
+<!-- Fuentes auto-alojadas y recortadas al alfabeto usado: cero peticiones externas -->
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/space-grotesk-700.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/inter-var.woff2" crossorigin>
+
+<!-- LCP: el retrato del hero se precarga en el formato que soporte el navegador -->
+<link rel="preload" as="image" type="image/avif" href="/assets/img/hero-540.avif"
+      imagesrcset="/assets/img/hero-540.avif 540w, /assets/img/hero.avif 1080w" imagesizes="100vw" fetchpriority="high">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MusicGroup",
+  "name": "Lucho RK",
+  "alternateName": "Emilio Roca Cáceres",
+  "genre": ["Reggaeton", "Trap", "Música urbana"],
+  "url": "https://luchork.pages.dev/",
+  "image": "https://luchork.pages.dev/assets/img/og.jpg",
+  "description": "Artista de reguetón y trap urbano nacido en Gran Canaria, España.",
+  "foundingLocation": { "@type": "Place", "name": "Las Palmas de Gran Canaria, España" },
+  "sameAs": [
+    "https://open.spotify.com/artist/1y6tVxTqgNfqxTayfohSKJ",
+    "https://www.youtube.com/@luchork",
+    "https://www.instagram.com/lucho.rk/",
+    "https://www.tiktok.com/@luluu.rk"
+  ]
+}
+</script>
+
+<style>
+/* ============================================================
+   FUENTES — woff2 local, subconjunto latino + acentos españoles
+   Inter es variable: un solo fichero cubre de 400 a 700
+   ============================================================ */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/assets/fonts/inter-var.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/assets/fonts/space-grotesk-700.woff2') format('woff2');
+}
+
+/* ============================================================
+   SISTEMA DE DISEÑO
+   Base 16px · escala tipográfica 1,25 · espaciado de 8px
+   Todos los pares texto/fondo verificados ≥ 4,5:1 (WCAG AA)
+   ============================================================ */
+:root {
+  /* Color — ratios de contraste sobre --bg #0A0A0B */
+  --bg:         #0A0A0B;
+  --surface:    #141416;
+  --surface-2:  #1C1C20;
+  --border:     #2A2A30;
+  --text:       #FAFAFA;  /* 19,1:1 */
+  --text-muted: #A8A8B3;  /*  8,4:1 */
+  --text-dim:   #8E8E9A;  /*  6,1:1 */
+  --gold:       #E8B04B;  /* 10,1:1 */
+  --ember:      #FF6B35;  /*  7,0:1 */
+  --on-gold:    #0A0A0B;  /* 10,1:1 sobre --gold */
+
+  /* Marca de plataformas */
+  --spotify: #1DB954;
+  --apple:   #FC3C44;
+  --youtube: #FF0000;
+  --ig:      #E1306C;
+  --tiktok:  #25F4EE;
+
+  /* Tipografía */
+  --font-display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --fs-xs:   0.8rem;    /* 12,8 */
+  --fs-sm:   0.875rem;  /* 14   */
+  --fs-base: 1rem;      /* 16   */
+  --fs-lg:   1.25rem;   /* 20   */
+  --fs-xl:   1.5625rem; /* 25   */
+  --fs-2xl:  1.9375rem; /* 31   */
+  --fs-3xl:  2.4375rem; /* 39   */
+  --fs-4xl:  3.0625rem; /* 49   */
+
+  /* Espaciado */
+  --sp-1: 0.5rem; --sp-2: 1rem; --sp-3: 1.5rem;
+  --sp-4: 2rem;   --sp-5: 3rem; --sp-6: 4rem;
+
+  --radius: 14px;
+  --radius-lg: 20px;
+  --player-h: 76px;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  /* Deja hueco para la barra del reproductor */
+  padding-bottom: calc(var(--player-h) + env(safe-area-inset-bottom, 0px));
+  overflow-x: hidden;
+}
+
+h1, h2, h3 { font-family: var(--font-display); line-height: 1.15; margin: 0; letter-spacing: -0.02em; }
+
+img { max-width: 100%; height: auto; display: block; }
+
+a { color: var(--gold); }
+
+:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.skip-link {
+  position: absolute; top: -100px; left: var(--sp-2); z-index: 200;
+  background: var(--gold); color: var(--on-gold);
+  padding: var(--sp-1) var(--sp-2); border-radius: 8px;
+  font-weight: 600; text-decoration: none;
+}
+.skip-link:focus { top: var(--sp-2); }
+
+.wrap { width: 100%; max-width: 560px; margin-inline: auto; padding-inline: var(--sp-2); }
+
+.section { padding-block: var(--sp-5); }
+
+.section-title {
+  font-size: var(--fs-xl);
+  margin-bottom: var(--sp-1);
+}
+.section-intro {
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  margin: 0 0 var(--sp-3);
+}
+
+.eyebrow {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-xs);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0 0 var(--sp-1);
+}
+
+/* ---------------------------------------------------------- HERO */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-block: var(--sp-6) var(--sp-5);
+  isolation: isolate;
+}
+.hero-media { position: absolute; inset: 0; z-index: -2; }
+.hero-media img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
+.hero::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(180deg,
+    rgba(10,10,11,0.55) 0%, rgba(10,10,11,0.25) 35%, rgba(10,10,11,0.92) 78%, var(--bg) 100%);
+}
+.hero h1 {
+  font-size: clamp(var(--fs-3xl), 13vw, 4.5rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: var(--sp-1);
+}
+.hero .tagline {
+  color: var(--text-muted);
+  font-size: var(--fs-lg);
+  margin: 0 0 var(--sp-3);
+  max-width: 22ch;
+}
+.scroll-cue {
+  display: block; margin-top: var(--sp-3);
+  color: var(--text-dim); font-size: var(--fs-xs);
+  letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none;
+}
+
+/* ---------------------------------------------------------- BOTONES */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-1);
+  min-height: 52px; padding: var(--sp-1) var(--sp-3);
+  border: 0; border-radius: 999px;
+  font-family: var(--font-body); font-size: var(--fs-base); font-weight: 600;
+  text-decoration: none; cursor: pointer;
+  transition: transform 0.18s var(--ease), background-color 0.18s var(--ease), border-color 0.18s var(--ease);
+}
+.btn-primary { background: var(--gold); color: var(--on-gold); width: 100%; }
+.btn-primary:hover { background: #F2BE60; transform: translateY(-2px); }
+.btn-ghost {
+  background: transparent; color: var(--text);
+  border: 1.5px solid var(--border);
+}
+.btn-ghost:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+.btn:active { transform: translateY(0); }
+
+/* ---------------------------------------------------------- PLATAFORMAS */
+.platforms { display: flex; flex-direction: column; gap: var(--sp-1); list-style: none; margin: 0; padding: 0; }
+.platform {
+  display: flex; align-items: center; gap: var(--sp-2);
+  min-height: 64px; padding: var(--sp-1) var(--sp-2);
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text); text-decoration: none; font-weight: 600;
+  transition: transform 0.18s var(--ease), background-color 0.18s var(--ease), border-color 0.18s var(--ease);
+}
+.platform:hover { background: var(--surface-2); transform: translateX(4px); }
+.platform .ico { flex: none; width: 32px; height: 32px; }
+.platform .meta { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.platform .sub { font-size: var(--fs-sm); font-weight: 400; color: var(--text-muted); }
+.platform .chev { color: var(--text-dim); flex: none; }
+
+.platform[data-net="spotify"]:hover  { border-color: var(--spotify); }
+.platform[data-net="apple"]:hover    { border-color: var(--apple); }
+.platform[data-net="ytmusic"]:hover,
+.platform[data-net="youtube"]:hover  { border-color: var(--youtube); }
+.platform[data-net="instagram"]:hover{ border-color: var(--ig); }
+.platform[data-net="tiktok"]:hover   { border-color: var(--tiktok); }
+
+.platform[data-net="spotify"]  .ico { color: var(--spotify); }
+.platform[data-net="apple"]    .ico { color: var(--apple); }
+.platform[data-net="ytmusic"]  .ico,
+.platform[data-net="youtube"]  .ico { color: var(--youtube); }
+.platform[data-net="instagram"].ico,
+.platform[data-net="instagram"] .ico { color: var(--ig); }
+.platform[data-net="tiktok"]   .ico { color: var(--tiktok); }
+
+/* ---------------------------------------------------------- EMBEDS */
+.embed {
+  border-radius: var(--radius); overflow: hidden;
+  background: var(--surface); border: 1px solid var(--border);
+  margin-bottom: var(--sp-2);
+}
+/* color-scheme + fondo evitan el destello blanco mientras carga el iframe */
+.embed iframe { display: block; width: 100%; height: 352px; border: 0; background: var(--surface); color-scheme: dark; }
+
+/* Fachada de YouTube: no carga el iframe hasta que se pulsa */
+.videos { display: grid; gap: var(--sp-2); }
+.video {
+  position: relative; display: block;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius); overflow: hidden;
+  background: var(--surface); border: 1px solid var(--border);
+  text-decoration: none; color: var(--text);
+}
+.video img { width: 100%; height: 100%; object-fit: cover; }
+.video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.video::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(10,10,11,0) 45%, rgba(10,10,11,0.85) 100%);
+  pointer-events: none;
+}
+.video.is-live::after { display: none; }
+.video-play {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--gold); color: var(--on-gold);
+  display: grid; place-items: center; z-index: 2;
+  transition: transform 0.2s var(--ease);
+}
+.video:hover .video-play { transform: translate(-50%, -50%) scale(1.08); }
+.video-title {
+  position: absolute; left: var(--sp-2); right: var(--sp-2); bottom: var(--sp-1);
+  z-index: 2; font-weight: 600; font-size: var(--fs-sm);
+}
+
+/* ---------------------------------------------------------- CONCIERTOS */
+.shows { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-1); }
+.show {
+  display: flex; align-items: center; gap: var(--sp-2);
+  padding: var(--sp-2);
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+}
+.show-date {
+  flex: none; width: 56px; text-align: center;
+  font-family: var(--font-display); font-weight: 700; line-height: 1.1;
+}
+.show-date .d { display: block; font-size: var(--fs-lg); font-weight: 700; }
+.show-date .m { display: block; font-size: var(--fs-xs); text-transform: uppercase; color: var(--gold); letter-spacing: 0.08em; }
+.show-info { flex: 1; min-width: 0; }
+.show-city { font-weight: 600; }
+.show-venue { font-size: var(--fs-sm); color: var(--text-muted); }
+.show .btn { min-height: 44px; padding-inline: var(--sp-2); font-size: var(--fs-sm); flex: none; }
+
+.empty-state {
+  padding: var(--sp-4) var(--sp-2); text-align: center;
+  background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius);
+  color: var(--text-muted);
+}
+.empty-state p { margin: 0 0 var(--sp-1); }
+.empty-state p:last-child { margin: 0; }
+
+/* ---------------------------------------------------------- NEWSLETTER */
+.newsletter {
+  background: linear-gradient(160deg, var(--surface-2), var(--surface));
+  border: 1px solid var(--border); border-left: 3px solid var(--gold);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-3) var(--sp-2);
+}
+.field { display: flex; flex-direction: column; gap: var(--sp-1); margin-bottom: var(--sp-2); }
+.field label { font-size: var(--fs-sm); font-weight: 500; color: var(--text-muted); }
+.field input {
+  min-height: 52px; padding: 0 var(--sp-2);
+  background: var(--bg); color: var(--text);
+  border: 1.5px solid var(--border); border-radius: 10px;
+  font-family: inherit; font-size: var(--fs-base);
+}
+.field input::placeholder { color: var(--text-dim); }
+.field input:focus-visible { border-color: var(--gold); }
+.form-note { font-size: var(--fs-xs); color: var(--text-dim); margin: var(--sp-1) 0 0; }
+.form-status { margin: var(--sp-2) 0 0; font-size: var(--fs-sm); font-weight: 500; }
+.form-status[data-state="ok"]  { color: var(--gold); }
+.form-status[data-state="err"] { color: var(--ember); }
+
+/* ---------------------------------------------------------- CONTACTO */
+.footer { padding-block: var(--sp-4) var(--sp-5); border-top: 1px solid var(--border); }
+.contact-line { color: var(--text-muted); font-size: var(--fs-sm); margin: 0 0 var(--sp-1); }
+.legal { color: var(--text-dim); font-size: var(--fs-xs); margin-top: var(--sp-3); }
+
+/* ---------------------------------------------------------- REPRODUCTOR */
+.player {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 100;
+  height: calc(var(--player-h) + env(safe-area-inset-bottom, 0px));
+  padding: 0 var(--sp-2) env(safe-area-inset-bottom, 0px);
+  display: flex; align-items: center; gap: var(--sp-2);
+  background: rgba(20, 20, 22, 0.94);
+  backdrop-filter: blur(14px);
+  border-top: 1px solid var(--border);
+}
+.player[hidden] { display: none; }
+.player-art { flex: none; width: 48px; height: 48px; border-radius: 8px; }
+.player-meta { flex: 1; min-width: 0; }
+.player-title {
+  font-size: var(--fs-sm); font-weight: 600;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.player-artist { font-size: var(--fs-xs); color: var(--text-muted); }
+
+.icon-btn {
+  flex: none; display: grid; place-items: center;
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--gold); color: var(--on-gold);
+  border: 0; cursor: pointer;
+  transition: transform 0.15s var(--ease);
+}
+.icon-btn:hover { transform: scale(1.06); }
+
+/* Barra de progreso: un input range real -> navegable con teclado */
+.player-seek {
+  position: absolute; left: 0; right: 0; top: -1px;
+  width: 100%; height: 20px; margin: 0;
+  background: transparent; -webkit-appearance: none; appearance: none;
+  cursor: pointer;
+}
+.player-seek::-webkit-slider-runnable-track { height: 3px; background: var(--border); }
+.player-seek::-moz-range-track { height: 3px; background: var(--border); }
+.player-seek::-moz-range-progress { height: 3px; background: var(--gold); }
+.player-seek::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 14px; height: 14px; margin-top: -5.5px;
+  border-radius: 50%; background: var(--gold); border: 0;
+}
+.player-seek::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--gold); border: 0; }
+.player-seek:focus-visible { outline-offset: -3px; }
+.player-time { font-size: var(--fs-xs); color: var(--text-dim); font-variant-numeric: tabular-nums; flex: none; }
+
+.visually-hidden {
+  position: absolute !important; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ---------------------------------------------------------- MOVIMIENTO */
+.reveal { opacity: 0; transform: translateY(20px); }
+.reveal.is-visible {
+  opacity: 1; transform: none;
+  transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}
+
+/* ---------------------------------------------------------- ESCRITORIO */
+@media (min-width: 720px) {
+  .wrap { max-width: 680px; }
+  .section { padding-block: var(--sp-6); }
+  .section-title { font-size: var(--fs-2xl); }
+  .videos { grid-template-columns: 1fr 1fr; }
+  .hero .tagline { font-size: var(--fs-xl); }
+}
+</style>
 </head>
+
 <body>
-  <main class="page">
-    <header class="profile">
-      <img class="avatar" src="assets/lucho-rk.jpg" alt="Lucho RK" onerror="this.style.display='none'">
-      <h1>Lucho RK</h1>
-      <p class="subtitle">Artista canario · Todas sus redes</p>
-    </header>
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
 
-    <section class="redes" aria-label="Redes sociales de Lucho RK">
+<!-- ============================================================ HERO -->
+<header class="hero" id="inicio">
+  <div class="hero-media">
+    <picture>
+      <source type="image/avif" srcset="/assets/img/hero-540.avif 540w, /assets/img/hero.avif 1080w" sizes="100vw">
+      <source type="image/webp" srcset="/assets/img/hero-540.webp 540w, /assets/img/hero.webp 1080w" sizes="100vw">
+      <img src="/assets/img/hero.jpg" width="1080" height="1440" fetchpriority="high" decoding="async"
+           alt="Retrato de Lucho RK">
+    </picture>
+  </div>
 
-      <a class="red-card spotify" href="https://open.spotify.com/artist/1y6tVxTqgNfqxTayfohSKJ" target="_blank" rel="noopener noreferrer">
-        <div class="red-icon">
-          <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141 4.34-1.319 9.719-.66 13.439 1.621.361.181.54.78.301 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.72 1.621.539.3.719 1.02.42 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-        </div>
-        <div class="red-info">
-          <span class="red-name">Spotify</span>
-          <span class="red-handle">Lucho RK · ~1.9M oyentes mensuales</span>
-        </div>
-        <span class="red-arrow">&rarr;</span>
+  <div class="wrap">
+    <p class="eyebrow">Gran Canaria · España</p>
+    <h1>Lucho RK</h1>
+    <p class="tagline">Sol y luna. Música urbana desde las Islas.</p>
+
+    <!--
+      Sin JS este botón es un ancla que lleva al reproductor de Spotify.
+      Con JS, app.js lo convierte en el botón de reproducción del preview.
+    -->
+    <a class="btn btn-primary" id="hero-play" href="#lanzamiento">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+      <span id="hero-play-label">Escuchar</span>
+    </a>
+
+    <a class="scroll-cue" href="#plataformas">Todas las plataformas ↓</a>
+  </div>
+</header>
+
+<main id="contenido">
+
+  <!-- ======================================================== PLATAFORMAS -->
+  <section class="section" id="plataformas" aria-labelledby="t-plataformas">
+    <div class="wrap reveal">
+      <h2 class="section-title" id="t-plataformas">Escucha en tu plataforma</h2>
+      <p class="section-intro">Elige dónde quieres darle al play.</p>
+
+      <ul class="platforms">
+        <li>
+          <a class="platform" data-net="spotify" data-track="platform_click"
+             href="https://open.spotify.com/artist/1y6tVxTqgNfqxTayfohSKJ" target="_blank" rel="noopener">
+            <svg class="ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141 4.34-1.319 9.719-.66 13.439 1.621.361.181.54.78.301 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.72 1.621.539.3.719 1.02.42 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+            <span class="meta"><span>Spotify</span><span class="sub">Perfil de artista</span></span>
+            <span class="chev" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+          </a>
+        </li>
+        <li>
+          <a class="platform" data-net="apple" data-track="platform_click"
+             href="https://music.apple.com/es/search?term=Lucho%20RK" target="_blank" rel="noopener">
+            <svg class="ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.994 6.124a9.23 9.23 0 00-.24-2.19c-.317-1.31-1.062-2.31-2.18-3.043a5.022 5.022 0 00-1.877-.726 10.496 10.496 0 00-1.564-.15c-.04-.003-.083-.01-.124-.013H5.986c-.152.01-.303.017-.455.026-.747.043-1.49.123-2.193.4-1.336.53-2.3 1.452-2.865 2.78-.192.448-.292.925-.363 1.408-.056.392-.088.785-.1 1.18 0 .032-.007.062-.01.093v12.223c.01.14.017.283.027.424.05.815.154 1.624.497 2.373.65 1.42 1.738 2.353 3.234 2.802.42.127.856.187 1.293.228.555.053 1.11.06 1.667.06h11.03a12.5 12.5 0 001.57-.1c.822-.106 1.596-.35 2.295-.81a5.046 5.046 0 001.88-2.207c.186-.42.293-.87.37-1.324.113-.675.138-1.358.137-2.04-.002-3.8 0-7.595-.003-11.394zm-6.423 3.99v5.712c0 .417-.058.827-.244 1.206-.29.59-.76.962-1.388 1.14-.35.1-.706.157-1.07.173-.95.045-1.773-.6-1.943-1.536-.142-.773.227-1.624 1.038-2.022.323-.16.67-.25 1.018-.324.378-.082.758-.153 1.134-.24.274-.063.457-.23.51-.516a.898.898 0 00.02-.193v-5.121c0-.062-.005-.126-.017-.187-.03-.15-.14-.24-.29-.225-.156.016-.312.05-.466.083l-4.68 1.02c-.298.064-.44.196-.48.5-.007.05-.01.098-.01.148v7.928c0 .418-.062.828-.248 1.206-.29.588-.76.96-1.387 1.137-.35.1-.706.16-1.07.176-.95.045-1.773-.6-1.943-1.536-.142-.774.227-1.625 1.038-2.023.323-.16.67-.248 1.018-.323.378-.082.757-.154 1.134-.24.274-.064.456-.23.51-.516a.885.885 0 00.02-.193V6.588c0-.106.008-.213.024-.317.05-.334.226-.55.554-.63.207-.05.417-.088.626-.132l4.65-1.017c.192-.042.386-.075.582-.1.36-.05.573.166.573.53v5.19z"/></svg>
+            <span class="meta"><span>Apple Music</span><span class="sub">Escuchar ahora</span></span>
+            <span class="chev" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+          </a>
+        </li>
+        <li>
+          <a class="platform" data-net="ytmusic" data-track="platform_click"
+             href="https://music.youtube.com/channel/UCj9MUZggW--rcFg5SjAbNZw" target="_blank" rel="noopener">
+            <svg class="ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.376 0 0 5.376 0 12s5.376 12 12 12 12-5.376 12-12S18.624 0 12 0zm0 19.104c-3.924 0-7.104-3.18-7.104-7.104S8.076 4.896 12 4.896s7.104 3.18 7.104 7.104-3.18 7.104-7.104 7.104zm0-13.332c-3.432 0-6.228 2.796-6.228 6.228S8.568 18.228 12 18.228s6.228-2.796 6.228-6.228S15.432 5.772 12 5.772zM9.684 15.54V8.46L15.816 12l-6.132 3.54z"/></svg>
+            <span class="meta"><span>YouTube Music</span><span class="sub">Canal oficial</span></span>
+            <span class="chev" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+          </a>
+        </li>
+        <li>
+          <a class="platform" data-net="youtube" data-track="platform_click"
+             href="https://www.youtube.com/@luchork" target="_blank" rel="noopener">
+            <svg class="ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            <span class="meta"><span>YouTube</span><span class="sub">Vídeos oficiales · @luchork</span></span>
+            <span class="chev" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ======================================================== LANZAMIENTO -->
+  <section class="section" id="lanzamiento" aria-labelledby="t-lanzamiento">
+    <div class="wrap reveal">
+      <p class="eyebrow">Último lanzamiento</p>
+      <h2 class="section-title" id="t-lanzamiento">Dale al play</h2>
+      <p class="section-intro">Lo nuevo y lo más escuchado, directo desde Spotify.</p>
+
+      <!--
+        Embed del perfil de artista: siempre muestra lo más reciente sin tener que tocar el HTML.
+        Para fijar un single o álbum concreto, cambia la URL por:
+          https://open.spotify.com/embed/track/ID_DE_LA_CANCION
+          https://open.spotify.com/embed/album/ID_DEL_ALBUM
+      -->
+      <div class="embed">
+        <iframe title="Reproductor de Spotify: música de Lucho RK"
+                src="https://open.spotify.com/embed/artist/1y6tVxTqgNfqxTayfohSKJ?utm_source=generator&theme=0"
+                width="100%" height="352" loading="lazy"
+                allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+      </div>
+
+      <a class="btn btn-primary" data-track="save_click"
+         href="https://open.spotify.com/artist/1y6tVxTqgNfqxTayfohSKJ" target="_blank" rel="noopener">
+        Guardar en Spotify
       </a>
+    </div>
+  </section>
 
-      <a class="red-card youtube" href="https://www.youtube.com/@luchork" target="_blank" rel="noopener noreferrer">
-        <div class="red-icon">
-          <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-        </div>
-        <div class="red-info">
-          <span class="red-name">YouTube</span>
-          <span class="red-handle">@luchork</span>
-        </div>
-        <span class="red-arrow">&rarr;</span>
-      </a>
+  <!-- ======================================================== VÍDEOS -->
+  <section class="section" id="videos" aria-labelledby="t-videos">
+    <div class="wrap reveal">
+      <h2 class="section-title" id="t-videos">Vídeos</h2>
+      <p class="section-intro">Los vídeos oficiales. Se cargan solo al pulsar, para que la página vuele.</p>
 
-      <a class="red-card instagram" href="https://www.instagram.com/lucho.rk/" target="_blank" rel="noopener noreferrer">
-        <div class="red-icon">
-          <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-        </div>
-        <div class="red-info">
-          <span class="red-name">Instagram</span>
-          <span class="red-handle">@lucho.rk · ~163K seguidores</span>
-        </div>
-        <span class="red-arrow">&rarr;</span>
-      </a>
+      <!--
+        Fachada: cada vídeo es un enlace normal a YouTube.
+        app.js intercepta el clic e inserta el iframe en su lugar.
+        Sin JS el enlace funciona y abre YouTube.
+        Para cambiar un vídeo basta con editar data-yt y el href.
+      -->
+      <div class="videos">
+        <a class="video" data-yt="oW1AhnZM-t0" data-title="AIRE" data-track="video_play"
+           href="https://www.youtube.com/watch?v=oW1AhnZM-t0" target="_blank" rel="noopener">
+          <img src="https://i.ytimg.com/vi/oW1AhnZM-t0/hqdefault.jpg" width="480" height="360"
+               loading="lazy" decoding="async" alt="Miniatura del vídeo AIRE de Lucho RK">
+          <span class="video-play" aria-hidden="true">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </span>
+          <span class="video-title">AIRE — Vídeo oficial</span>
+        </a>
 
-      <a class="red-card tiktok" href="https://www.tiktok.com/@luluu.rk" target="_blank" rel="noopener noreferrer">
-        <div class="red-icon">
-          <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-        </div>
-        <div class="red-info">
-          <span class="red-name">TikTok</span>
-          <span class="red-handle">@luluu.rk · ~152K seguidores</span>
-        </div>
-        <span class="red-arrow">&rarr;</span>
-      </a>
+        <a class="video" data-yt="-EbpzuHuNR4" data-title="BANE" data-track="video_play"
+           href="https://www.youtube.com/watch?v=-EbpzuHuNR4" target="_blank" rel="noopener">
+          <img src="https://i.ytimg.com/vi/-EbpzuHuNR4/hqdefault.jpg" width="480" height="360"
+               loading="lazy" decoding="async" alt="Miniatura del vídeo BANE de Lucho RK y La Pantera">
+          <span class="video-play" aria-hidden="true">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </span>
+          <span class="video-title">BANE — con La Pantera</span>
+        </a>
+      </div>
+    </div>
+  </section>
 
-    </section>
-  </main>
+  <!-- ======================================================== CONCIERTOS -->
+  <section class="section" id="conciertos" aria-labelledby="t-conciertos">
+    <div class="wrap reveal">
+      <h2 class="section-title" id="t-conciertos">Conciertos</h2>
+      <p class="section-intro">Próximas fechas de la gira.</p>
+
+      <!--
+        ============================================================
+        FECHAS DE CONCIERTOS — RELLENAR ANTES DE PUBLICAR
+        ============================================================
+        Por defecto se muestra el estado vacío de abajo, para no anunciar
+        fechas que no existen. Cuando tengas las fechas reales:
+          1. Borra el bloque .empty-state
+          2. Descomenta <ul class="shows"> y duplica cada <li> por concierto
+          3. Actualiza datetime="AAAA-MM-DD" (lo usan los lectores de pantalla)
+
+        <ul class="shows">
+          <li class="show">
+            <time class="show-date" datetime="2026-09-12">
+              <span class="d">12</span><span class="m">Sep</span>
+            </time>
+            <div class="show-info">
+              <div class="show-city">Madrid</div>
+              <div class="show-venue">Sala La Riviera</div>
+            </div>
+            <a class="btn btn-ghost" data-track="tickets_click"
+               href="https://EJEMPLO-ENTRADAS.com/lucho-rk-madrid" target="_blank" rel="noopener">
+              Entradas<span class="visually-hidden"> para Madrid, 12 de septiembre</span>
+            </a>
+          </li>
+        </ul>
+      -->
+
+      <div class="empty-state">
+        <p><strong>Nuevas fechas muy pronto.</strong></p>
+        <p>Apúntate abajo y te avisamos antes de que salgan a la venta.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================== NEWSLETTER -->
+  <section class="section" id="newsletter" aria-labelledby="t-newsletter">
+    <div class="wrap reveal">
+      <div class="newsletter">
+        <p class="eyebrow">Lista de correo</p>
+        <h2 class="section-title" id="t-newsletter">Entérate el primero</h2>
+        <p class="section-intro">Nueva música, entradas y sorteos. Sin spam, y te borras cuando quieras.</p>
+
+        <!--
+          action="" hace que el formulario no envíe a ningún sitio hasta configurarlo.
+          Configura el endpoint de tu proveedor en assets/js/app.js (CONFIG.newsletter).
+          Ver README para Mailchimp / Beehiiv / Formspree.
+        -->
+        <form id="newsletter-form" method="post" action="" novalidate>
+          <div class="field">
+            <label for="email">Tu correo electrónico</label>
+            <input type="email" id="email" name="email" inputmode="email"
+                   autocomplete="email" required placeholder="nombre@correo.com">
+          </div>
+          <!-- Trampa antispam: invisible para personas, tentadora para bots -->
+          <div class="visually-hidden" aria-hidden="true">
+            <label for="website">No rellenar</label>
+            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+          </div>
+          <button type="submit" class="btn btn-primary">Apuntarme</button>
+          <p class="form-note">Al apuntarte aceptas recibir correos de Lucho RK. Baja en un clic.</p>
+          <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================== REDES -->
+  <section class="section" id="redes" aria-labelledby="t-redes">
+    <div class="wrap reveal">
+      <h2 class="section-title" id="t-redes">Redes</h2>
+      <p class="section-intro">El día a día, aquí.</p>
+
+      <ul class="platforms">
+        <li>
+          <a class="platform" data-net="instagram" data-track="platform_click"
+             href="https://www.instagram.com/lucho.rk/" target="_blank" rel="noopener">
+            <svg class="ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            <span class="meta"><span>Instagram</span><span class="sub">@lucho.rk</span></span>
+            <span class="chev" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+          </a>
+        </li>
+        <li>
+          <a class="platform" data-net="tiktok" data-track="platform_click"
+             href="https://www.tiktok.com/@luluu.rk" target="_blank" rel="noopener">
+            <svg class="ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+            <span class="meta"><span>TikTok</span><span class="sub">@luluu.rk</span></span>
+            <span class="chev" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<!-- ============================================================ CONTACTO -->
+<footer class="footer" id="contacto">
+  <div class="wrap reveal">
+    <h2 class="section-title">Contacto y booking</h2>
+    <!-- SUSTITUIR por los datos reales de management antes de publicar -->
+    <p class="contact-line">Management y contrataciones: <a href="mailto:booking@ejemplo.com">booking@ejemplo.com</a></p>
+    <p class="contact-line">Prensa: <a href="mailto:prensa@ejemplo.com">prensa@ejemplo.com</a></p>
+    <!-- Cuando tengas el EPK en PDF, súbelo a /assets/epk.pdf y cambia el href por "/assets/epk.pdf" -->
+    <p style="margin-top:var(--sp-2)">
+      <a class="btn btn-ghost" data-track="epk_click"
+         href="mailto:booking@ejemplo.com?subject=Solicitud%20de%20EPK%20-%20Lucho%20RK">Solicitar EPK</a>
+    </p>
+    <p class="legal">© <span id="year">2026</span> Lucho RK. Todos los derechos reservados.</p>
+  </div>
+</footer>
+
+<!-- ============================================================ REPRODUCTOR
+     Oculto de partida: solo aparece si hay un preview configurado y JS activo.
+     Nunca suena sin que el usuario lo active (WCAG 1.4.2 nivel A). -->
+<div class="player" id="player" hidden>
+  <input class="player-seek" id="seek" type="range" min="0" max="1000" value="0" step="1"
+         aria-label="Progreso de la pista" disabled>
+  <!-- Sin src: la carátula solo se descarga si hay preview configurado (la pone app.js) -->
+  <img class="player-art" id="player-art" width="48" height="48" alt="" decoding="async">
+  <div class="player-meta">
+    <div class="player-title" id="player-title">—</div>
+    <div class="player-artist">Lucho RK</div>
+  </div>
+  <span class="player-time" id="player-time">0:00</span>
+  <button class="icon-btn" id="toggle" type="button" aria-label="Reproducir">
+    <svg id="ico-play" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+    <svg id="ico-pause" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" hidden><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>
+  </button>
+</div>
+
+<audio id="audio" preload="none" crossorigin="anonymous"></audio>
+
+<script src="/assets/js/app.js" defer></script>
+
+<!-- Cloudflare Web Analytics — sustituye TU_TOKEN por el token real (ver README) -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "TU_TOKEN"}'></script>
 </body>
 </html>
