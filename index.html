@@ -590,34 +590,44 @@ a { color: var(--gold); }
 
       <!--
         ============================================================
-        FECHAS DE CONCIERTOS — RELLENAR ANTES DE PUBLICAR
+        FECHAS DE CONCIERTOS — dos formas de rellenarlas
         ============================================================
-        Por defecto se muestra el estado vacío de abajo, para no anunciar
-        fechas que no existen. Cuando tengas las fechas reales:
-          1. Borra el bloque .empty-state
-          2. Descomenta <ul class="shows"> y duplica cada <li> por concierto
-          3. Actualiza datetime="AAAA-MM-DD" (lo usan los lectores de pantalla)
 
-        <ul class="shows">
-          <li class="show">
-            <time class="show-date" datetime="2026-09-12">
-              <span class="d">12</span><span class="m">Sep</span>
-            </time>
-            <div class="show-info">
-              <div class="show-city">Madrid</div>
-              <div class="show-venue">Sala La Riviera</div>
-            </div>
-            <a class="btn btn-ghost" data-track="tickets_click"
-               href="https://EJEMPLO-ENTRADAS.com/lucho-rk-madrid" target="_blank" rel="noopener">
-              Entradas<span class="visually-hidden"> para Madrid, 12 de septiembre</span>
-            </a>
-          </li>
-        </ul>
+        A) AUTOMÁTICO (recomendado)
+           El atributo data-auto hace que app.js pida las fechas a
+           /api/conciertos, que a su vez consulta Bandsintown o Ticketmaster.
+           Solo hay que poner la clave en las variables de entorno de
+           Cloudflare (ver README). Si no hay claves o no hay fechas, se
+           queda el mensaje de abajo y no pasa nada.
+
+           Ojo: Spotify no tiene API pública de conciertos. Las fechas que
+           enseña Spotify vienen de estos mismos proveedores.
+
+        B) A MANO
+           Quita data-auto del div y sustituye el .empty-state por:
+
+           <ul class="shows">
+             <li class="show">
+               <time class="show-date" datetime="2026-09-12">
+                 <span class="d">12</span><span class="m">Sep</span>
+               </time>
+               <div class="show-info">
+                 <div class="show-city">Madrid</div>
+                 <div class="show-venue">Sala La Riviera</div>
+               </div>
+               <a class="btn btn-ghost" data-track="tickets_click"
+                  href="https://EJEMPLO-ENTRADAS.com/..." target="_blank" rel="noopener">
+                 Entradas<span class="visually-hidden"> para Madrid, 12 de septiembre</span>
+               </a>
+             </li>
+           </ul>
       -->
 
-      <div class="empty-state">
-        <p><strong>Nuevas fechas muy pronto.</strong></p>
-        <p>Apúntate abajo y te avisamos antes de que salgan a la venta.</p>
+      <div id="lista-conciertos" data-auto>
+        <div class="empty-state">
+          <p><strong>Nuevas fechas muy pronto.</strong></p>
+          <p>Apúntate abajo y te avisamos antes de que salgan a la venta.</p>
+        </div>
       </div>
     </div>
   </section>

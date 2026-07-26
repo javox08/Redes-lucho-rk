@@ -15,7 +15,7 @@ La web funciona tal cual, pero lleva datos de ejemplo. Repasa esta lista:
 | `robots.txt`, `sitemap.xml` | El mismo dominio |
 | `assets/img/hero.*` | El retrato de verdad (ahora hay un marcador que pone «SUSTITUIR POR RETRATO»). Ver *Imágenes* abajo. |
 | `assets/img/og.jpg` | Imagen para compartir, 1200×630 |
-| `index.html` → sección `#conciertos` | Las fechas reales (ver *Conciertos*) |
+| Variables de entorno en Cloudflare | La clave de Bandsintown o Ticketmaster para que las fechas salgan solas (ver *Conciertos*) |
 | `index.html` → `<footer>` | `booking@ejemplo.com` y `prensa@ejemplo.com` por los correos reales, y el enlace del EPK |
 | `index.html` → final del `<body>` | `"token": "TU_TOKEN"` por el token de Cloudflare Web Analytics |
 | `assets/js/app.js` → `CONFIG` | Preview de audio, alta de correo y eventos (ver abajo) |
@@ -142,27 +142,80 @@ Cualquier elemento con `data-track="nombre_evento"` se mide solo, sin tocar JS.
 
 ## Conciertos
 
-Por defecto la sección muestra «Nuevas fechas muy pronto», para no anunciar
-conciertos que no existen. Dentro de `index.html`, en `#conciertos`, hay un
-bloque comentado con el formato listo:
+### Por qué no salen «de Spotify»
+
+**La API pública de Spotify no tiene endpoint de conciertos.** Spotify sí enseña
+fechas en la app, pero no las genera: las recibe de Bandsintown, Songkick y
+Ticketmaster. Lleva años pedido en su foro de desarrolladores y no está.
+
+Así que la web va directamente a esas mismas fuentes. El resultado es la misma
+lista que ves en Spotify, y encima con nuestro diseño en lugar de un widget
+ajeno.
+
+### Automático (recomendado)
+
+La función `functions/api/conciertos.js` se despliega sola con Cloudflare Pages
+y queda en `/api/conciertos`. La web la consulta al cargar y pinta las fechas.
+
+Solo hay que darle una clave. En **Pages → tu proyecto → Configuración →
+Variables de entorno**:
+
+| Variable | Valor |
+|---|---|
+| `ARTISTA` | `Lucho RK` |
+| `BANDSINTOWN_APP_ID` | tu app_id de Bandsintown |
+| `TICKETMASTER_API_KEY` | tu clave de Ticketmaster |
+| `PAIS` | `ES` (solo lo usa Ticketmaster) |
+
+Con una basta. Si pones las dos, prueba Bandsintown y, si no devuelve nada, tira
+de Ticketmaster.
+
+- **Bandsintown** — es la fuente que usa la mayoría de artistas y de la que bebe
+  Spotify. El app_id se pide en [artists.bandsintown.com](https://artists.bandsintown.com)
+  (gratis, pero hay que reclamar el perfil del artista).
+- **Ticketmaster** — clave gratuita e inmediata en
+  [developer.ticketmaster.com](https://developer.ticketmaster.com). Buena
+  cobertura de salas grandes en España, peor de salas pequeñas.
+
+Las claves van **solo** en las variables de entorno de Cloudflare, nunca en el
+repositorio.
+
+Detalles de la implementación:
+
+- Cachea 1 h en el borde, así que la API del proveedor apenas recibe tráfico.
+- Descarta fechas pasadas y ordena de más próxima a más lejana.
+- Si no hay claves, la API falla o no hay fechas, responde `200` con lista vacía
+  y la web deja el mensaje de «Nuevas fechas muy pronto». Nunca se rompe.
+- El contenido de la API se pinta con `textContent`, nunca con `innerHTML`: si un
+  proveedor devolviese HTML, se vería como texto y no se ejecutaría.
+- España no se imprime en la fila (sobra); las fechas de fuera sí muestran el
+  país, traducido al español.
+
+### A mano
+
+Si prefieres escribirlas tú, quita el atributo `data-auto` del
+`<div id="lista-conciertos">` y sustituye el `.empty-state` por:
 
 ```html
-<li class="show">
-  <time class="show-date" datetime="2026-09-12">
-    <span class="d">12</span><span class="m">Sep</span>
-  </time>
-  <div class="show-info">
-    <div class="show-city">Madrid</div>
-    <div class="show-venue">Sala La Riviera</div>
-  </div>
-  <a class="btn btn-ghost" data-track="tickets_click" href="..." target="_blank" rel="noopener">
-    Entradas<span class="visually-hidden"> para Madrid, 12 de septiembre</span>
-  </a>
-</li>
+<ul class="shows">
+  <li class="show">
+    <time class="show-date" datetime="2026-09-12">
+      <span class="d">12</span><span class="m">Sep</span>
+    </time>
+    <div class="show-info">
+      <div class="show-city">Madrid</div>
+      <div class="show-venue">Sala La Riviera</div>
+    </div>
+    <a class="btn btn-ghost" data-track="tickets_click" href="..." target="_blank" rel="noopener">
+      Entradas<span class="visually-hidden"> para Madrid, 12 de septiembre</span>
+    </a>
+  </li>
+</ul>
 ```
 
-Borra el `.empty-state`, descomenta el `<ul class="shows">` y duplica el `<li>`
-por cada fecha. El `datetime` es el que leen los lectores de pantalla.
+El `datetime` es el que leen los lectores de pantalla, y el `visually-hidden`
+del botón evita que se oigan cinco «Entradas» seguidos sin saber a cuál
+corresponde cada uno.
 
 ---
 
@@ -192,6 +245,7 @@ index.html          Todo el marcado + el CSS incrustado en el <head>
 assets/js/app.js    Reproductor, fachada de YouTube, formulario, eventos
 assets/fonts/       Inter (variable) y Space Grotesk, recortadas al alfabeto usado
 assets/img/         Imágenes (marcadores, sustituir)
+functions/api/      Pages Function que sirve /api/conciertos
 _headers            Cabeceras de Cloudflare Pages: caché, seguridad, CSP
 favicon.svg  site.webmanifest  robots.txt  sitemap.xml
 ```

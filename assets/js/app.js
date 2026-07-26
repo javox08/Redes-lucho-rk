@@ -318,6 +318,99 @@
   });
 
   /* ===========================================================================
+     CONCIERTOS AUTOMÁTICOS
+     Pide las fechas a /api/conciertos (Cloudflare Pages Function), que consulta
+     Bandsintown o Ticketmaster. Spotify no ofrece API pública de conciertos:
+     las fechas que muestra vienen de estos mismos proveedores.
+
+     Mejora progresiva: si no hay API, falla la red o no hay fechas, se queda el
+     estado vacío que ya viene en el HTML. Nunca deja la sección rota.
+     =========================================================================== */
+  var listaConciertos = $('#lista-conciertos');
+
+  var MESES = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+               'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+  var MESES_LARGOS = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
+                      'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+
+  // Los proveedores devuelven el país en inglés. En una fecha española sobra
+  // (y hace que la fila salte a dos líneas); en las de fuera, sí interesa.
+  var PAISES = {
+    'Spain': '', 'España': '',
+    'France': 'Francia', 'Germany': 'Alemania', 'Italy': 'Italia',
+    'Portugal': 'Portugal', 'United Kingdom': 'Reino Unido',
+    'Netherlands': 'Países Bajos', 'Belgium': 'Bélgica', 'Switzerland': 'Suiza',
+    'Mexico': 'México', 'Argentina': 'Argentina', 'Chile': 'Chile',
+    'Colombia': 'Colombia', 'United States': 'Estados Unidos'
+  };
+
+  function pais(nombre) {
+    if (!nombre) return '';
+    return PAISES.hasOwnProperty(nombre) ? PAISES[nombre] : nombre;
+  }
+
+  function el(tag, cls, texto) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (texto != null) n.textContent = texto;   // textContent, nunca innerHTML:
+    return n;                                   // el contenido viene de una API externa
+  }
+
+  function filaConcierto(ev) {
+    var d = new Date(ev.fecha);
+    if (isNaN(d)) return null;
+
+    var li = el('li', 'show');
+
+    var time = el('time', 'show-date');
+    time.dateTime = d.toISOString().slice(0, 10);
+    time.appendChild(el('span', 'd', String(d.getDate())));
+    time.appendChild(el('span', 'm', MESES[d.getMonth()]));
+    li.appendChild(time);
+
+    var info = el('div', 'show-info');
+    info.appendChild(el('div', 'show-city', ev.ciudad || ev.titulo || 'Por confirmar'));
+    var sitio = [ev.recinto, pais(ev.pais)].filter(Boolean).join(' · ');
+    if (sitio) info.appendChild(el('div', 'show-venue', sitio));
+    li.appendChild(info);
+
+    if (ev.url) {
+      var a = el('a', 'btn btn-ghost', 'Entradas');
+      a.href = ev.url;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.setAttribute('data-track', 'tickets_click');
+      // Contexto solo para lectores de pantalla: "Entradas" a secas se repite
+      // en cada fila y no dice a qué concierto pertenece.
+      var oculto = el('span', 'visually-hidden',
+        ' para ' + (ev.ciudad || 'este concierto') + ', ' + d.getDate() + ' de ' + MESES_LARGOS[d.getMonth()]);
+      a.appendChild(oculto);
+      li.appendChild(a);
+    }
+    return li;
+  }
+
+  if (listaConciertos && listaConciertos.hasAttribute('data-auto')) {
+    fetch('/api/conciertos', { headers: { 'Accept': 'application/json' } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (datos) {
+        if (!datos || !datos.eventos || !datos.eventos.length) return;
+
+        var ul = el('ul', 'shows');
+        datos.eventos.forEach(function (ev) {
+          var fila = filaConcierto(ev);
+          if (fila) ul.appendChild(fila);
+        });
+        if (!ul.children.length) return;      // ninguna fecha era válida: no tocamos nada
+
+        listaConciertos.innerHTML = '';
+        listaConciertos.appendChild(ul);
+        track('conciertos_cargados', { fuente: datos.fuente, total: ul.children.length });
+      })
+      .catch(function () { /* sin conexión o sin función: se queda el estado vacío */ });
+  }
+
+  /* ===========================================================================
      FORMULARIO DE CORREO
      =========================================================================== */
   var form = $('#newsletter-form');
