@@ -1,0 +1,129 @@
+:root {
+  color-scheme: light dark;
+  --bg: #0d0d10;
+  --card-bg: #17171c;
+  --card-bg-hover: #1f1f27;
+  --text: #f5f5f7;
+  --text-muted: #9a9aa5;
+  --spotify: #1DB954;
+  --youtube: #FF0000;
+  --instagram: #E1306C;
+  --tiktok: #25F4EE;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  padding: 40px 16px;
+}
+
+.page {
+  width: 100%;
+  max-width: 480px;
+}
+
+.profile {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 12px;
+}
+
+.profile h1 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.redes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.red-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--card-bg);
+  border-radius: 14px;
+  text-decoration: none;
+  color: var(--text);
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.red-card:hover {
+  background: var(--card-bg-hover);
+  transform: translateY(-2px);
+}
+
+.red-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.red-card.spotify .red-icon { color: var(--spotify); background: rgba(29, 185, 84, 0.12); }
+.red-card.youtube .red-icon { color: var(--youtube); background: rgba(255, 0, 0, 0.12); }
+.red-card.instagram .red-icon { color: var(--instagram); background: rgba(225, 48, 108, 0.12); }
+.red-card.tiktok .red-icon { color: var(--tiktok); background: rgba(37, 244, 238, 0.12); }
+
+.red-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.red-name {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.red-handle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.red-arrow {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f4f4f7;
+    --card-bg: #ffffff;
+    --card-bg-hover: #ececf2;
+    --text: #17171c;
+    --text-muted: #6b6b76;
+  }
+}
