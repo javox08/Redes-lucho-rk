@@ -13,8 +13,7 @@ La web funciona tal cual, pero lleva datos de ejemplo. Repasa esta lista:
 |---|---|
 | `index.html` (todo el `<head>`) | `https://luchork.pages.dev` → tu dominio real. Sale 5 veces: `canonical`, `og:url`, `og:image`, `twitter:image` y el JSON-LD. **La `og:image` tiene que ser una URL absoluta o WhatsApp no mostrará la imagen.** |
 | `robots.txt`, `sitemap.xml` | El mismo dominio |
-| `assets/img/hero.*` | El retrato de verdad (ahora hay un marcador que pone «SUSTITUIR POR RETRATO»). Ver *Imágenes* abajo. |
-| `assets/img/og.jpg` | Imagen para compartir, 1200×630 |
+| `assets/img/hero.*` | **Opcional.** Ahora hay un emblema diseñado que funciona sin foto. Si consigues un retrato de Lucho, cámbialo (ver *Imágenes*). |
 | Variables de entorno en Cloudflare | La clave de Bandsintown o Ticketmaster para que las fechas salgan solas (ver *Conciertos*) |
 | `index.html` → `<footer>` | `booking@ejemplo.com` y `prensa@ejemplo.com` por los correos reales, y el enlace del EPK |
 | `index.html` → final del `<body>` | `"token": "TU_TOKEN"` por el token de Cloudflare Web Analytics |
@@ -221,12 +220,33 @@ corresponde cada uno.
 
 ## Imágenes
 
-Los ficheros de `assets/img/` son **marcadores generados**, no fotos reales.
-Sustitúyelos manteniendo nombres y proporciones:
+Las imágenes de `assets/img/` están **generadas a medida**: un emblema sol/luna
+sobre fondo oscuro, con la misma paleta que el resto de la web. No son fotos ni
+marcadores rotos, así que la web se puede publicar tal cual.
+
+### Sobre el retrato
+
+El hero está diseñado para funcionar **sin fotografía**. Muchas webs de artistas
+tiran de un tratamiento gráfico en lugar de una foto, y así no dependes de tener
+sesión de fotos ni de los derechos de una imagen.
+
+Si quieres poner una foto de Lucho, tiene que ser una que tengáis derecho a usar:
+del propio artista, de su management, o de un fotógrafo con permiso. **No sirve
+descargar una foto de prensa o de Instagram**: casi siempre tienen copyright del
+fotógrafo, y una web oficial es justo donde peor sienta un problema así.
+
+Cuando la tengas, sustituye `hero.jpg` / `.webp` / `.avif` (y las versiones
+`hero-540.*`) y cambia el `alt=""` del `<img>` del hero por una descripción real
+de la foto. El degradado que hay encima ya garantiza que el título se lea
+aunque la foto sea clara.
+
+### Tamaños
+
+Sustitúyelas manteniendo nombres y proporciones:
 
 | Fichero | Tamaño | Para qué |
 |---|---|---|
-| `hero.avif` / `.webp` / `.jpg` | 1080×1440 (3:4) | Retrato del hero |
+| `hero.avif` / `.webp` / `.jpg` | 1080×1440 (3:4) | Fondo del hero |
 | `hero-540.avif` / `.webp` | 540×720 | Versión para móvil |
 | `og.jpg` | 1200×630 | Compartir en WhatsApp, Instagram, X |
 | `cover.jpg` / `.webp` | 320×320 | Carátula del reproductor |
